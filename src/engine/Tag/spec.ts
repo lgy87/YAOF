@@ -1,18 +1,12 @@
+import * as r from "ramda"
 import Tag from "."
 
-describe("Tag", () => {
+describe.only("Tag", () => {
   it("可以创建Tag", () => {
     const name = "this is a tag"
     const tag = new Tag(name)
 
     expect(tag.name()).toBe(name)
-  })
-  it("可以比较Tag是否相等", () => {
-    const name = "this is a tag"
-    const tag = new Tag(name)
-    const tag2 = new Tag(name)
-
-    expect(tag.eq(tag2)).toBeTruthy()
   })
   it("可以建立Tag父子关系", () => {
     const parent = new Tag("parent")
@@ -33,7 +27,7 @@ describe("Tag", () => {
     new Tag("son", parent)
     new Tag("son2", parent)
 
-    expect(parent.children()).toHaveLength(2)
+    expect(parent.children().length()).toBe(2)
   })
   it("子tag是唯一的", () => {
     const parent = new Tag("parent")
@@ -41,6 +35,12 @@ describe("Tag", () => {
     parent.add(son)
     parent.add(son)
 
-    expect(parent.children()).toHaveLength(1)
+    expect(parent.children().length()).toBe(1)
+  })
+  it("可以正常json化", () => {
+    const name = "this is a tag!"
+    const tag = new Tag(name)
+
+    expect(r.whereEq({ name, children: [] }, tag.toJSON())).toBe(true)
   })
 })

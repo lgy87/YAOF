@@ -3,6 +3,7 @@
  * 2020/02/23
  * lgy87@foxmail.com
  */
+import Tags from "~/engine/Tags"
 import type { ID } from "~/engine/types"
 import uuid from "~/utils/uuid"
 
@@ -10,7 +11,7 @@ export default class Tag {
   #ID: ID
   #name: string
   #parent: Tag = Tag.nil
-  #children: Array<Tag> = []
+  #children: Tags
 
   private static nil = new Tag("")
 
@@ -18,6 +19,7 @@ export default class Tag {
     this.#ID = uuid({prefix: "TAG_"})
     this.#name = name
     this.#parent = parent
+    this.#children = new Tags()
 
     if (Tag.isNotNil(this.#parent)) {
       this.#parent.add(this)
@@ -33,18 +35,20 @@ export default class Tag {
     return this.#parent
   }
   add(child: Tag) {
-    if (this.children().includes(child)) return
-
-    this.children().push(child)
-  }
-  eq(other: Tag) {
-    return this.name() === other.name()
+    this.children().add(child)
   }
   hasChild(son: Tag) {
-    return this.children().includes(son)
+    return this.children().has(son)
   }
   children() {
     return this.#children
+  }
+  toJSON() {
+    return {
+      ID: this.ID(),
+      name: this.name(),
+      children: this.children().toJSON(),
+    }
   }
   private static isNotNil(tag: Tag) {
     return tag !== Tag.nil
