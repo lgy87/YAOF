@@ -1,7 +1,7 @@
 import DateTime from "."
 
 describe("DateTime", () => {
-  it("可以创建DateTime类型的实例", () => {
+  it("可以创建DateTime类型的实例, 并正常格式化显示", () => {
     const time = "2020/02/24 20:55:36"
     const date = new Date(time)
     const dt = new DateTime(date.valueOf())
