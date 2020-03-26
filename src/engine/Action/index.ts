@@ -3,6 +3,7 @@
  * 2020/02/23
  * lgy87@foxmail.com
  */
+import DateTime from "~/engine/DateTime"
 import Tag from "~/engine/Tag"
 import type { ID } from "~/engine/types"
 import uuid from "~/utils/uuid"
@@ -10,19 +11,23 @@ import uuid from "~/utils/uuid"
 export default class Action {
   #ID: ID
   #title: string
-  #note: string = ""
+  #note?: string
   #flagged: boolean = false
   #parent: Action = Action.nil
   #children: Array<Action> = []
   #tags: Array<Tag> = []
+  #createdAt: DateTime
+  #updatedAt?: DateTime
+  #deletedAt?: DateTime
 
   private static nil = new Action("")
 
   constructor(title: string, parent: Action = Action.nil) {
-    this.#ID =uuid({prefix: "ACTION_"})
+    this.#ID = uuid({prefix: "ACTION_"})
     this.#title = title
 
     this.#parent = parent
+    this.#createdAt = new DateTime()
 
     if (Action.isNotNil(this.#parent)) {
       this.#parent.add(this)
@@ -37,6 +42,9 @@ export default class Action {
   add(child: Action) {
     this.#children.push()
   }
+  flagged() {
+    return this.#flagged
+  }
   note(note?: string) {
     if (typeof note === "string") {
       this.#note = note
@@ -44,6 +52,18 @@ export default class Action {
     }
 
     return this.#note
+  }
+  tags() {
+    return this.#tags
+  }
+  createdAt() {
+    return this.#createdAt
+  }
+  updatedAt() {
+    return this.#updatedAt
+  }
+  deletedAt() {
+    return this.#deletedAt
   }
   private static isNotNil(other: Action) {
     return other !== Action.nil
