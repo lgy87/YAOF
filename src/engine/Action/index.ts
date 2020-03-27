@@ -4,7 +4,7 @@
  * lgy87@foxmail.com
  */
 import DateTime from "~/engine/DateTime"
-import Tag from "~/engine/Tag"
+import Tags from "~/engine/Tags"
 import type { ID } from "~/engine/types"
 import uuid from "~/utils/uuid"
 
@@ -15,7 +15,7 @@ export default class Action {
   #flagged: boolean = false
   #parent: Action = Action.nil
   #children: Array<Action> = []
-  #tags: Array<Tag> = []
+  #tags: Tags
   #createdAt: DateTime
   #updatedAt?: DateTime
   #deletedAt?: DateTime
@@ -28,6 +28,7 @@ export default class Action {
 
     this.#parent = parent
     this.#createdAt = new DateTime()
+    this.#tags = new Tags()
 
     if (Action.isNotNil(this.#parent)) {
       this.#parent.add(this)
