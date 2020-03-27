@@ -1,1 +1,1 @@
-# 专注于管理自己一天事务的工具
+# Pay attention to your affairs.
